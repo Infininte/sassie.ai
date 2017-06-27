@@ -2,11 +2,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
+const mongoose = require('mongoose');
+const adadb = require('./adadb');
 
 /**
  * Mongoose config
  */
-const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test');
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -15,6 +16,7 @@ db.once('open', function() {
 });
 
 var schema = mongoose.Schema({
+    __hashId: { type: String, index: { unique: true } },
     board: [[String],
             [String],
             [String]],
@@ -26,7 +28,11 @@ var schema = mongoose.Schema({
     }
 });
 var State = db.model('State', schema);
-var initialState = new State({
+// State.remove({}, function (err, everything) {
+//   if (err) return console.error(err);
+//   console.log('Deleted everything %s', JSON.stringify(everything))
+// })
+var initialState = {
     board: [['', '', ''],
      ['', '', ''],
      ['', '', '']],
@@ -36,12 +42,24 @@ var initialState = new State({
         gameEnding: "",
         winner: ""
     }
-});
-initialState.save(function (err, initialState) {
-  if (err) return console.error(err);
-});
+};
 
-State.findOne(initialState, function (err, state) {
+// adadb.find(initialState, State, function(err, returnedState){
+//   if (err) return console.error(err);
+//   if(returnedState) console.log('Found initial state! %s', JSON.stringify(returnedState))
+//   if(!returnedState){
+//     adadb.save(initialState, State, function(err, returnedState){
+//       if (err) return console.error(err);
+//       console.log('Saved initial state! %s', JSON.stringify(returnedState));
+//     });
+//   }
+// });
+
+// adadb.save(initialState, State, function (err, initialState) {
+//   if (err) return console.error(err);
+// });
+
+State.find({}, function (err, state) {
   if (err) return console.error(err);
   console.log('Found initial state! %s', JSON.stringify(state))
 });
