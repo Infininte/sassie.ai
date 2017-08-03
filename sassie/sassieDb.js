@@ -1,5 +1,5 @@
 const hashjs = require('hash.js');
-const gameState = require('./gameState');
+const gameState = require('../gameState');
 
 function getId(state){
     return hashjs.sha512().update(JSON.stringify(state)).digest('hex');
@@ -9,18 +9,23 @@ function getGameId(){
     return hashjs.sha512().update( (new Date()).getTime() ).digest('hex');
 }
 
-function save(state, schema, callback){
+function save(state, model, callback){
+    // console.log("Before initiated adaState: " + JSON.stringify(state));
     var adaState = initAdaState(state);
+    // console.log("After initiated adaState: " + JSON.stringify(adaState));
 
-    var newAdaState = new schema(adaState);
+    var newAdaState = new model(adaState);
     newAdaState.save(callback);
 }
 
 function find(state, schema, callback){
     var thisErr, thisNewState;
-    if(state.id) callback([[], thisNewState]);
+    if(state.id) callback([], state);
 
-    schema.findOne({id: getId(state)}).exec(callback);
+    schema.findOne({id: getId(state)}, function(err, object){
+        // console.log("Found state: " + object.id);
+        callback(err, object);
+    });
 }
 
 function initAdaState(state){
@@ -50,7 +55,7 @@ function initAdaState(state){
 
 function getActionWeights(actions){
     return actions.map(a => {
-        return {action: a, weight: 0.5}
+        return {action: a, weight: Math.random()}
     });
 }
 
@@ -60,7 +65,10 @@ function getActionWeight(){
 
 db = {
     save: save,
-    find: find
+    find: find,
+    getId: getId,
+    getGameId: getGameId,
+    getActionWeights: getActionWeights
 };
 
 module.exports = db;
