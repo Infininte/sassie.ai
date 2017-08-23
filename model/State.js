@@ -17,8 +17,14 @@ StateSchema = new Schema({
 },
 {minimize: false});
 
+StateSchema.statics.getInstance = function(obj) {
+    var newState = StateSchema.statics.findInstance(obj);
+    
+    if(!newState) return StateSchema.statics.createInstance(obj);
+    return newState;
+}
+
 StateSchema.statics.createInstance = function(obj) {
-    //TODO fix this
     if(isNotInitialized(obj)) {
         var newState = {};
 
@@ -29,6 +35,15 @@ StateSchema.statics.createInstance = function(obj) {
     }
 
     return new this(newState);
+}
+
+StateSchema.statics.findInstance = function(obj) {
+    var newState = {};
+    console.log("Sassie: " + sassieDb.getId(obj));
+    StateSchema.find({id: sassieDb.getId(obj)}, function(err, object){
+        if(err) console.log(err);
+        if(object) return object;
+    });
 }
 
 module.exports = mongoose.model('State', StateSchema);

@@ -43,12 +43,17 @@ var obj = {
   board : [ [ "", "", "" ], [ "", "", "" ], [ "", "", "" ] ] 
 };
 
-var moveAgain = State.createInstance(obj);
+var moveAgain = State.getInstance(obj);
 
-moveAgain.save(function(err, obj){
-  if(err) console.log(err);
-  console.log(obj);
-});
+console.log(moveAgain);
+
+// console.log("Id: c80cbcef469636d5da316dc6324fab630346300394e1043763e505ebf0a3e0196deb10e0720a8ab524b14fdc73a1fbe84bd7462e5a1784cb6ccd449fcca10dff");
+// console.log("Sassie: " + sassieDb.getId(obj));
+
+// moveAgain.save(function(err, obj){
+//   if(err) console.log(err);
+//   console.log(obj);
+// });
 
 
 app.get('*', (req, res) => {
