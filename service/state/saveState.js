@@ -1,5 +1,5 @@
 const StateSchema = require('../../model/State');
-const sassieDb = require('../../sassie/sassieDb');
+const sassieDb = require('../../sassie/db/db');
 const utils = require('./isInitialized');
 const stateInitializer = require('./initializeState');
 

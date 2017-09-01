@@ -3,7 +3,8 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
 const mongoose = require('mongoose');
-const sassieDb = require('./sassie/sassieDb');
+mongoose.Promise = require('bluebird');
+const sassieDb = require('./sassie/db/db');
 const sassie = require('./sassie/sassie');
 const service = require('./service/service');
 
