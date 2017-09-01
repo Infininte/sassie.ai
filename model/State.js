@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const sassieDb = require('../sassie/sassieDb');
+
 var Schema = mongoose.Schema;
 
 StateSchema = new Schema({
@@ -15,45 +15,14 @@ StateSchema = new Schema({
     currentPlayer:  {type: String, required: false },
     winner: { type: String, required: false }
 },
-{minimize: false});
+{
+    minimize: false
+});
 
-StateSchema.statics.getInstance = function(obj) {
-    var newState = StateSchema.statics.findInstance(obj);
-    
-    if(!newState) return StateSchema.statics.createInstance(obj);
-    return newState;
-}
-
-StateSchema.statics.createInstance = function(obj) {
-    if(isNotInitialized(obj)) {
-        var newState = {};
-
-        newState.id = sassieDb.getId(obj);
-        newState.gameId = sassieDb.getGameId();
-        newState.state = obj;
-        newState.actions = sassieDb.getActionWeights(obj.actions);
-    }
-
-    return new this(newState);
-}
-
-StateSchema.statics.findInstance = function(obj) {
-    var newState = {};
-    console.log("Sassie: " + sassieDb.getId(obj));
-    StateSchema.find({id: sassieDb.getId(obj)}, function(err, object){
-        if(err) console.log(err);
-        if(object) return object;
-    });
-}
 
 module.exports = mongoose.model('State', StateSchema);
 
 
-
-
-function isNotInitialized(state){
-    return !this.id && !this.state;
-}
 
 var emptyState = {
     id:      '',
