@@ -10,9 +10,7 @@ function getGameId(){
 }
 
 function save(state, model, callback){
-    // console.log("Before initiated adaState: " + JSON.stringify(state));
     var adaState = initAdaState(state);
-    // console.log("After initiated adaState: " + JSON.stringify(adaState));
 
     var newAdaState = new model(adaState);
     newAdaState.save(callback);
@@ -23,7 +21,6 @@ function find(state, schema, callback){
     if(state.id) callback([], state);
 
     schema.findOne({id: getId(state)}, function(err, object){
-        // console.log("Found state: " + object.id);
         callback(err, object);
     });
 }
