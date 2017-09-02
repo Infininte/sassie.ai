@@ -19,7 +19,9 @@ function saveState(obj, fail, saved){
     }
 
     function initialized(state) {
-        state.save(fail);
+        state.save(function(err){
+            if(err) fail(err)
+        });
         saved(state);
     }
 };

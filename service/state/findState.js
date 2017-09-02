@@ -1,8 +1,8 @@
 const StateSchema = require('../../model/State');
-const sassieDb = require('../../sassie/db/db');
+const sassie = require('../../sassie/sassie');
 
 function findState(obj, fail, found, notFound){
-    sassieDb.getId(obj, function(id) {
+    sassie.db.getId(obj, fail, function(id) {
         StateSchema.find({id: id}, callback);
     });
 
