@@ -1,5 +1,5 @@
 const StateSchema = require('../../model/State');
-const sassieDb = require('../../sassie/sassieDb');
+const sassieDb = require('../../sassie/db/db');
 const utils = require('./isInitialized');
 const stateInitializer = require('./initializeState');
 
@@ -19,7 +19,9 @@ function saveState(obj, fail, saved){
     }
 
     function initialized(state) {
-        state.save(fail);
+        state.save(function(err){
+            if(err) fail(err)
+        });
         saved(state);
     }
 };

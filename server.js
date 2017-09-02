@@ -3,8 +3,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
 const mongoose = require('mongoose');
-const sassieDb = require('./sassie/sassieDb');
-const sassie = require('./sassie/sassie');
+mongoose.Promise = require('bluebird');
 const service = require('./service/service');
 
 /**
@@ -19,7 +18,7 @@ db.once('open', function() {
   service.state.getState(testObj, fail, got);
 
   function fail(err){
-    console.log(err);
+    console.log("fail!: " + err);
   };
 
   function got(state){
@@ -68,8 +67,3 @@ app.listen(app.get('port'), () => {
 });
 
 module.exports = app;
-
-
-function isNotInitialized(state){
-    return !this.id && !this.state;
-}
