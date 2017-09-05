@@ -1,28 +1,20 @@
 const StateSchema = require('../../model/State');
 const sassie = require('../../sassie/sassie');
+const idSetter = require('./setId');
+const gameIdSetter = require('./setGameId');
+const stateSetter = require('./setState');
+const actionsSetter = require('./setActions');
 
 function initializeState(obj, fail, initialized) {
-    var newState = {};
     
     //This might look odd, but it's called currying and is a functional principle
-    sassie.db.getId(obj, fail, function(id) {
-        sassie.db.getGameId(fail, function(gameId){
-            sassie.ai.generateActionWeights(obj.actions, fail, function(actions){
-                createState(id, gameId, obj, actions, initialized);
-            })
-        })
+    idSetter.setId({}, obj, fail, function(state){
+        gameIdSetter.setGameId(state, fail, function(state){
+            stateSetter.setState(state, obj, fail, function(state){
+                actionsSetter.setActions(state, obj.actions, fail, initialized);
+            });
+        });
     });
-
-    function createState(id, gameId, state, actions, created){
-        var newState = {};
-
-        newState.id = id;
-        newState.gameId = gameId;
-        newState.state = state;
-        newState.actions = actions;
-
-        created(new StateSchema(newState))
-    }
 }
 
 module.exports = {
