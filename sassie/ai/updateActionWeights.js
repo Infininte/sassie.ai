@@ -1,6 +1,36 @@
-//TODO: actually make this work
+const action = require('../../service/action/action')
 
-function updateWeights(){
+function updateActionWeights(actions, actionChosen, fail, updated){
+    var step = 1;
+
+    action.hasAction(actions, actionChosen, does, doesNot);
+
+    function does(foundAction){
+        updateWeight(
+            foundAction,
+            1,
+            fail,
+            updated)
+    }
+
+    function doesNot() {
+        fail("Chosen action is not in the available action list");
+    }
+
+    function updateWeight(action, step, fail, updated){
+        var newAction = Object.assign({}, action);
+        newAction.weight += step;
+        
+        updated(newAction)
+    }
+}
+
+
+module.exports = {
+    updateActionWeights: updateActionWeights
+};
+
+
     //This problem is essentially many, many instances of one problem
     //A normal AI problem contains many data points at once and many 
     //  different data points.
@@ -52,8 +82,3 @@ function updateWeights(){
     //  (attacking a creature with death touch) should outweigh the 
     //  more general best decision of attacking a smaller creature 
     //  with a bigger creature. 
-}
-
-module.exports = {
-
-};
